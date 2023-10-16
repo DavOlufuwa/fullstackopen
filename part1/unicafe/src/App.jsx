@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Statistics from "./components/Statistics"
 import Button from "./components/Button"
-import Anecdote from "./components/Anecdote"
 
 
 const App = () => {
@@ -15,9 +14,6 @@ const App = () => {
       <Button buttonProps={{good, neutral, bad, setGood, setNeutral, setBad}}/>
       <h1>statistics</h1>
       <Statistics statProps={{good, neutral, bad}} />
-      <div>
-        <Anecdote anecdoteProps={{anecdotes, selected, setSelected}}/>
-      </div>
     </div>
   )
 }
