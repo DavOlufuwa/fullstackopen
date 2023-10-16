@@ -32,8 +32,6 @@ function App() {
     const randomNumber = Math.floor(Math.random() * anecdotes.length)
     setSelected(randomNumber)
   }
-
-  console.log()
   
   return (
     <div>
