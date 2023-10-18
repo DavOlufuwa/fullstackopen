@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import Persons from "./components/Persons"
-
+import './index.css'
 import phoneService from './services/phone'
+import Notification from "./components/Notification"
 
 
 
@@ -13,6 +14,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [msg, setMsg] = useState(null)
+  const [error, setError] = useState(false)
 
   // fetching data from server
   useEffect(() => {
@@ -22,7 +25,6 @@ const App = () => {
       setPersons(personsInfo)}
     )
   }, [])
-
 
   const handleNameChange = (e) => {
     setNewName(e.target.value)
@@ -51,19 +53,29 @@ const App = () => {
     if(validate) {
       phoneService
       .updatePerson(existingUser.id, {...existingUser, number: newNumber})
-      .then(returnedInfo => setPersons(persons.map(person => person.id !== returnedInfo.id ? person : returnedInfo)))
-      .catch(err => console.log(err))
+      .then(returnedInfo => setPersons(persons.map(person => person.id !==    returnedInfo.id ? person : returnedInfo)))
+      .catch(err => {
+        setMsg(`${newName} has been removed from the server`)
+        setError(true)
+        setTimeout(() => {
+          setMsg(null)
+          setError(false)
+        }, 3000)
+        console.log(err)
+        setPersons()
+      })
 
-      alert(`${newName} updated successfully`)
+      setMsg(
+        `${newName} has been updated successfully`
+      )
+      setTimeout(() => {
+        setMsg(null)
+      }, 3000)
     }
-
-      
-      
       setNewName('')
       setNewNumber('')
       return
     }
-
 
     const newPerson = {
       name: newName,
@@ -77,7 +89,12 @@ const App = () => {
     )
     .catch(err => console.log(err))
     
-    alert("New Contact Added")
+    setMsg(
+      `${newName} has been added successfully`
+    )
+    setTimeout(() => {
+      setMsg(null)
+    }, 3000)
     
     setNewName('')
     setNewNumber('')
@@ -94,14 +111,34 @@ const App = () => {
       phoneService
       .deletePerson(personToDelete.id)
       .then(personsInfo => setPersons(personsInfo))
-    }
+      .catch(error => {
+        setMsg(
+          `'${personsInfo}' was already removed from server`
+        )
+        setError(true)
+        setTimeout(() => {
+          setMsg(null)
+          setError(false)
+        }, 5000)
+        console.log(error)
 
-    alert("Contact deleted successfully")
+      })
+
+      setMsg(
+        `'${personToDelete.name}' was deleted successfully`
+      )
+      setTimeout(() => {
+        setMsg(null)
+      }, 5000)
+    }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        <Notification message={msg} error={error}/>
+      </div>
       <Filter filter={filter} handleFilter={handleFilter} />
       <h2>Add a new</h2>
       <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addNewContact={addNewContact} />
