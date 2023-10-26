@@ -8,11 +8,12 @@ blogRouter.get('/', async (request, response) => {
 })
 
 // POST
-blogRouter.post('/', (request, response, ) => {
+blogRouter.post('/', async (request, response, ) => {
   const blog = new Blog(request.body)
 
-  const savedBlog = await.blog.save()
-  response.status(201).json(savedNote)
+  const savedBlog = await blog.save()
+  
+  response.status(201).json(savedBlog)
 })
 
 // GET BY ID

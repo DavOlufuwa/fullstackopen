@@ -8,18 +8,8 @@ const Blog = require('../models/blog')
 
   beforeEach(async () => {
     await Blog.deleteMany({})
-    console.log('cleared blogs')
-
-    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-
-    const promiseArray = blogObjects.map(blog => blog.save())
-
-    await Promise.all(promiseArray)
-
-
-    
-
-  })
+    await Blog.insertMany(helper.initialBlogs)
+  }, 100000)
 
 
 
