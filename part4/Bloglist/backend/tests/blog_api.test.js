@@ -8,37 +8,40 @@ const Blog = require('../models/blog')
 
   beforeEach(async () => {
     await Blog.deleteMany({})
+    console.log('cleared blogs')
+
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+
+    const promiseArray = blogObjects.map(blog => blog.save())
+
+    await Promise.all(promiseArray)
+
+
     
-    let blogObject = new Blog(helper.initialBlogs[0])
 
-    await blogObject.save()
-
-    blogObject = new Blog(helper.initialBlogs[1])
-
-    await blogObject.save()
-  }, 1000000)
+  })
 
 
 
-  // test('blogs are returned as json', async () => {
-  //   await api
-  //     .get('/api/blogs')
-  //     .expect(200)
-  //     .expect('Content-Type', /application\/json/)
-  // })
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
 
-  // test('there are two blogs returned', async () => {
-  //   const response = await api.get('/api/blogs')
-  //   expect(response.body).toHaveLength(helper.initialBlogs.length)
-  // })
+  test('there are two blogs returned', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
 
-  // test('a specific note is within the returned notes', async () => {
-  //   const response = await api.get('/api/blogs')
+  test('a specific note is within the returned notes', async () => {
+    const response = await api.get('/api/blogs')
     
-  //   const contents = response.body.map(r => r.title)
+    const contents = response.body.map(r => r.title)
 
-  //   expect(contents).toContain('React patterns')
-  // })
+    expect(contents).toContain('React patterns')
+  })
 
 
 
