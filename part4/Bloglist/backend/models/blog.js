@@ -7,7 +7,7 @@ const blogSchema = new Schema({
   title: {
     type: String,
     required: true
-  }, 
+  },  
   author: String,
   url: {
     type: String,
@@ -17,7 +17,7 @@ const blogSchema = new Schema({
     type: Number,
     default: 0
   },
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   }
