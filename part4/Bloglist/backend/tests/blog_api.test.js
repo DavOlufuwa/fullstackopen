@@ -91,6 +91,24 @@ const Blog = require('../models/blog')
   }, 100000)
 
 
+  test('blog can be created', async () => {
+    const newBlog = {
+      title: "One Beer Two Pongs",
+      author: "Two Hearts",
+      url: "crazyrichasiana@gmail.com",
+      likes: 234,
+      userId: "653e33b8a7b9a32d147e0c55"
+    }
+
+    const response = await api.post('/api/blogs').send(newBlog)
+
+    expect(response.status).toBe(201)
+
+    
+  }, 100000)
+
+
+
   afterAll(async () => {
     mongoose.connection.close()
   })
