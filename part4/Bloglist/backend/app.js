@@ -30,7 +30,7 @@ app.use(express.static('dist'))
 app.use(requestLogger)
 app.use('/api/users', userRouter)
 app.use('/api/blogs', blogRouter)
-app.use('api/login', loginRouter)
+app.use('/api/login', loginRouter)
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
