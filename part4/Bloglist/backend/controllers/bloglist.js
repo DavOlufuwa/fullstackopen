@@ -22,15 +22,16 @@ const getTokenFrom = request => {
 // POST
 blogRouter.post('/', async (request, response, ) => {
   const body = request.body
-
+  // get the token from the request header
   const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  
+  // confirm the token is valid by checking its id
   if(!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  
+  // locate the user by the id contained in the token
   const user = await User.findById(decodedToken.id)
 
+  // create a new blog
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -44,7 +45,7 @@ blogRouter.post('/', async (request, response, ) => {
   user.createdBlogs = user.createdBlogs.concat(savedBlog.id)
   
   await user.save()
-
+  
   response.status(201).json(savedBlog)
 }) 
  

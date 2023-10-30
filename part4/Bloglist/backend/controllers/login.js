@@ -28,7 +28,9 @@ loginRouter.post('/', async (request, response) => {
   }
   // A token is created with the jwt.sign method and the userForToken object
   // only the parties who know the secret key can create a token
-  const token = jwt.sign(userForToken, process.env.SECRET)
+  // Ensure the token expires after 60 minutes
+  const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60*60 })
+
 
   // A token, inclusive of the name and username is sent back
   response
