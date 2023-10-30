@@ -16,22 +16,35 @@ const Blog = require('../models/blog')
    expect(response.body[0].id).toBeDefined() 
   }, 100000)
 
-  test('a blog can be added to the database', async () => {
+
+  test('blog can be added with token', async () => {
     const newBlog = {
       title: "test blog",
       author: "test author",
       url: "test url",
-      likes: 0
+      likes: 45,
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api.post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${helper.token}`)
 
-    const bloglist = await api.get('/api/blogs')
     // expect response 201
     expect(response.status).toBe(201)
 
-    expect(bloglist.body).toHaveLength(4)
+  }, 100000)
 
+  test('blog cannot be added without token', async () => {
+    const newBlog = {
+      title: "blog without Token",
+      author: "test author without token",
+      url: "test url without token",
+      likes: 45,
+    }
+
+    const response = await api.post('/api/blogs').send(newBlog)
+    
+    expect(response.status).toBe(401)
   }, 100000)
 
   test('likes property default value is zero', async () => {
@@ -41,7 +54,9 @@ const Blog = require('../models/blog')
       url: "test url"
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api.post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${helper.token}`)
 
     expect(response.body.likes).toBe(0)
   }, 100000)
@@ -53,25 +68,24 @@ const Blog = require('../models/blog')
       likes: 25
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api.post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${helper.token}`)
 
     expect(response.status).toBe(400)
   }, 100000)
 
 
-  test('a valid blog can be deleted', async () => {
-    const id = '653beb9aa52c777f64d33e0e'
+  test('a valid blog cannot be deleted without token', async () => {
+    const id = '653fd90e110afcbf1e067c4d'
     
 
     const responseB = await api.delete(`/api/blogs/${id}`)
     
-    const newNumber = await api.get('/api/blogs')
-
-    expect(responseB.status).toBe(204)
-
-    expect(newNumber.body).toHaveLength(2)
+    expect(responseB.status).toBe(401)
 
   }, 100000)
+  
 
   test('blog can be updated', async () => {
     const id = "653a85cdc8b2c3d2cc228abb"
@@ -88,23 +102,6 @@ const Blog = require('../models/blog')
     expect(response.body.likes).toEqual(100)
 
   }, 100000)
-
-
-  test('blog can be created', async () => {
-    const newBlog = {
-      title: "One Beer Two Pongs",
-      author: "Two Hearts",
-      url: "crazyrichasiana@gmail.com",
-      likes: 234,
-      userId: "653e33b8a7b9a32d147e0c55"
-    }
-
-    const response = await api.post('/api/blogs').send(newBlog)
-
-    expect(response.status).toBe(201)
-
-  }, 100000)
- 
 
 
   afterAll(async () => {
