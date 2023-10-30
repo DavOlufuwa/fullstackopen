@@ -23,14 +23,15 @@ mongoose.connect(MONGODB_URI)
 .catch((error) => {
   logger.error('error connecting to MongoDB:', error.message)
 })
-
+  
 app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
 app.use(requestLogger)
 app.use(tokenExtractor)
+
 app.use('/api/users', userRouter)
-app.use('/api/blogs', blogRouter)
+app.use('/api/blogs',  blogRouter)
 app.use('/api/login', loginRouter)
 app.use(unknownEndpoint)
 app.use(errorHandler)

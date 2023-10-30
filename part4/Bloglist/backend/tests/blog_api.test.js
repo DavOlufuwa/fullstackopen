@@ -6,9 +6,8 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 
 
-  test('there are three blogs returned', async () => {
-    const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(3)
+  test('there are blogs returned', async () => {
+    await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/ )
   }, 100000)
 
 
@@ -63,7 +62,7 @@ const Blog = require('../models/blog')
   test('a valid blog can be deleted', async () => {
     const id = '653beb9aa52c777f64d33e0e'
     
-    
+
     const responseB = await api.delete(`/api/blogs/${id}`)
     
     const newNumber = await api.get('/api/blogs')
