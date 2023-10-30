@@ -104,9 +104,8 @@ const Blog = require('../models/blog')
 
     expect(response.status).toBe(201)
 
-    
   }, 100000)
-
+ 
 
 
   afterAll(async () => {

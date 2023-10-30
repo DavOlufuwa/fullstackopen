@@ -9,8 +9,6 @@ userRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-
-
 // CREATE NEW USER
 userRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
@@ -22,10 +20,14 @@ userRouter.post('/', async (request, response) => {
     name,
     passwordHash
   })
-
   const savedUser = await user.save()
-
   response.status(201).json(savedUser)
+})
+
+// DELETE A USER
+userRouter.delete('/:id', async (request, response) => {
+  await User.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 

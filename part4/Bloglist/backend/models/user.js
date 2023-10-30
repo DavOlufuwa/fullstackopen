@@ -6,10 +6,19 @@ const userSchema = new Schema({
   username: {
     type: String,
     unique: true,
-    required: true
+    required: true,
+    minlength: 4
   },
-  name: String,
-  passwordHash: String,
+  name: {
+    type: String,
+    required: true,
+    minlength: 4
+  },
+  passwordHash: {
+    type: String,
+    required: true,
+    minlength: 6
+  },
   createdBlogs: [
     {
       type: Schema.Types.ObjectId,
