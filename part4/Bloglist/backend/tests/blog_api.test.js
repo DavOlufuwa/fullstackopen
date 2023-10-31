@@ -78,8 +78,7 @@ const Blog = require('../models/blog')
 
   test('a valid blog cannot be deleted without token', async () => {
     const id = '653fd90e110afcbf1e067c4d'
-    
-
+  
     const responseB = await api.delete(`/api/blogs/${id}`)
     
     expect(responseB.status).toBe(401)
