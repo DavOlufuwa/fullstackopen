@@ -1,7 +1,9 @@
 import {useState} from 'react'
 import blogService from '../services/blogs'
 
-const NewBlog = () => {
+const NewBlog = ({blogProps}) => {
+
+  const {setUpdate, setError, setMessage} = blogProps
 
   const [newBlog, setNewBlog] = useState({
     title : "",
@@ -30,17 +32,26 @@ const NewBlog = () => {
         url : "",
         likes : 0
       })
-      console.log('new Blog created', response)
+      setUpdate("updated")
+      setMessage(`a new blog ${response.title} by ${response.author} added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
     }
     catch(exception)
     {
-      console.log(exception)
+      setUpdate("not updated")
+      setError(true)
+      setMessage("Blog is not added")
+      setTimeout(() => {
+        setError(false)
+        setMessage(null)
+      }, 3000)
     }
   }
 
   return (
     <div>
-      <div></div>
       <form onSubmit={createNewBlog}>
         <div>
           <label htmlFor="title">Title:</label>
@@ -50,6 +61,7 @@ const NewBlog = () => {
             value={title}
             name="title"
             onChange={handleChange}
+            required
           />
         </div>
         <div>
@@ -60,6 +72,7 @@ const NewBlog = () => {
             value={author}
             name="author"
             onChange={handleChange}
+            required
           />
         </div>
         <div>
@@ -70,6 +83,7 @@ const NewBlog = () => {
             value={url}
             name="url"
             onChange={handleChange}
+            required
           />
         </div>
         <div>

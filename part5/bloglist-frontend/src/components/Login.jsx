@@ -1,9 +1,10 @@
 import React from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import Notification from './Notification'
 const Login = ({ userState }) => {
 
-  const {setUser, username, setUsername, password, setPassword} = userState
+  const {setUser, username, setUsername, password, setPassword, setError, setMessage, error, message} = userState
   
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -19,18 +20,21 @@ const Login = ({ userState }) => {
       localStorage.setItem('loggedBlogListUser', JSON.stringify(logginUser))
       
     } catch (exception) {
-      // setErrorMessage('Wrong credentials')
-      // setTimeout(() => {
-      //   setErrorMessage(null)
-      // }, 5000)
-      console.log('Wrong credentials')
+      
+      setMessage('wrong username or password')
+      setError(true)
+      setTimeout(() => {
+        setMessage(null)
+        setError(false)
+      }, 3000)
     }
   }
   
   
   return (
-    <div>
+    <div className={``}>
       <h2>Log in to application</h2>
+      <Notification message={message} error={error} />
       <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="username">Username</label>

@@ -3,12 +3,17 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
+import Notification from './components/Notification'
+import '../index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [update, setUpdate] = useState(null)
+  const [error, setError] = useState(false)
+  const [message, setMessage] = useState(null)
 
 
   useEffect(() => {
@@ -30,7 +35,7 @@ const App = () => {
       )  
     }    
     fetchBlogs()
-  }, [])
+  }, [update])
 
   const handleLogOut = () => {
     window.localStorage.removeItem('loggedBlogListUser')
@@ -48,15 +53,20 @@ const App = () => {
             username, 
             setUsername, 
             password, 
-            setPassword
+            setPassword,
+            error,
+            message,
+            setError,
+            setMessage,
           }}
         />
         :
         <>
+          <h2>blogs</h2>
+          <Notification message={message} error={error}/>
           <p>{user.name} logged in <button onClick={handleLogOut}>logout</button></p>
           <div>
-            <h2>blogs</h2>
-            <NewBlog user={user} />
+            <NewBlog blogProps={{setUpdate, setMessage, setError}} />
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
