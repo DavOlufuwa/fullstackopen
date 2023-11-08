@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { voteAnecdote } from "../reducers/anecdoteReducer";
 import { setNotifications, unsetNotifications } from "../reducers/notificationReducer";
+import { voteAnecdote } from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
