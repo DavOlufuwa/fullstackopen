@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import '../index.css'
+import Toggler from './components/Toggler'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,8 +15,11 @@ const App = () => {
   const [update, setUpdate] = useState(null)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(null)
+  const [showForm, setShowForm] = useState(false)
+  const [loginVisible, setLoginVisible] = useState(false);
 
 
+  
   useEffect(() => {
     const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogListUser'))
     if(loggedUser){
@@ -41,13 +45,13 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogListUser')
     setUser(null)
   }
-
-  return (
+  return (    
     <>
+      <h2>blogs</h2>   
       {
-        user === null ? 
-        <Login 
-          userState={{
+        showForm && 
+          <Login 
+            userState={{
             user, 
             setUser, 
             username, 
@@ -57,22 +61,31 @@ const App = () => {
             error,
             message,
             setError,
-            setMessage,
+            setMessage
           }}
         />
-        :
-        <>
-          <h2>blogs</h2>
-          <Notification message={message} error={error}/>
-          <p>{user.name} logged in <button onClick={handleLogOut}>logout</button></p>
-          <div>
-            <NewBlog blogProps={{setUpdate, setMessage, setError}} />
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
-          </div>
-        </>
       }
+      {
+        showForm ? <button onClick={() => setShowForm(false)}>cancel</button> :
+        user === null && <button onClick={() => setShowForm(true)}>Log in</button>
+      }
+      <>        
+        { user && 
+          <>
+            <p>{user.name} logged in <button onClick={handleLogOut}>log out</button></p> 
+            <Toggler buttonlabel= "create new blog">
+              <Notification message={message} error={error}/>
+              <NewBlog blogProps={{setUpdate, setMessage, setError}} />
+            </Toggler>
+          </>
+        }
+        <div>
+        
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
+        </div>
+      </>
     </>
   )
 }

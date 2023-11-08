@@ -12,7 +12,7 @@ blogRouter.get('/', async (request, response) => {
 })
 
 // POST
-blogRouter.post('/', userExtractor, async (request, response, ) => {
+blogRouter.post('/', userExtractor, async (request, response ) => {
   const body = request.body
   const user = request.user
   

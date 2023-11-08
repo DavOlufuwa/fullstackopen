@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import Notification from './Notification'
 const Login = ({ userState }) => {
+
+
+
+    const hideWhenVisible = { display: loginVisible ? "none" : "" };
+    const showWhenVisible = { display: loginVisible ? "" : "none" };
 
   const {setUser, username, setUsername, password, setPassword, setError, setMessage, error, message} = userState
   
@@ -27,12 +32,15 @@ const Login = ({ userState }) => {
         setMessage(null)
         setError(false)
       }, 3000)
+
+
     }
   }
   
+ 
   
   return (
-    <div className={``}>
+    <div className={``} >
       <h2>Log in to application</h2>
       <Notification message={message} error={error} />
       <form onSubmit={handleLogin}>
